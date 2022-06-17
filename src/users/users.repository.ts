@@ -13,18 +13,14 @@ export class UsersRepository {
 		return this.users.filter((item) => item.id === id)[0];
 	}
 
-	create(data: Partial<User>) {
-		const user = Object.assign(new User(), { id: uuid.v4(), ...data });
-		console.log('create repository user:', user);
+	create(input: Partial<User>) {
+		const user = Object.assign(new User(), { id: uuid.v4(), ...input });
 		this.users.push(user);
 		return user;
 	}
 
-	update(id: string, data: Partial<User>) {
-		// const user = this.findOne(id);
-		const user = Object.assign(this.findOne(id), data);
-		console.log('updated repository user:', user);
-		// this.users.push(user);
+	update(id: string, input: Partial<User>) {
+		const user = Object.assign(this.findOne(id), input);
 		return user;
 	}
 
@@ -32,10 +28,8 @@ export class UsersRepository {
 		const index = this.users.findIndex((item) => item.id === id);
 		if (index != -1) {
 			const user = this.users.splice(index, 1)[0];
-			console.log('deleted user:', user);
 			return user;
 		}
 		return undefined;
 	}
-
 }

@@ -1,3 +1,5 @@
+import * as uuid from 'uuid';
+import { NotFoundError, ValidationError } from '../app/errors';
 import { UsersService } from './users.service';
 
 export class UsersController {
@@ -14,9 +16,15 @@ export class UsersController {
 	}
 
 	async findOne(id: string) {
+		if (!uuid.validate(id)) {
+			throw new ValidationError('userId is invalid');
+		}
 		console.log('controller, findOne, got id:', id);
 		const result = this.usersService.findOne(id);
 		console.log('contoller findOne result:', result);
+		if (!result) {
+			throw new NotFoundError('user not found');
+		}
 		return result;
 	}
 

@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import http from 'http';
-import { requestListener } from './routes';
+import { requestListener } from './app/routes';
 
 const PORT = process.env.PORT || 4000;
 
