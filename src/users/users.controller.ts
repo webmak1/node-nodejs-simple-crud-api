@@ -1,5 +1,3 @@
-import * as uuid from 'uuid';
-import { ValidationError } from '../app/errors';
 import { UsersService } from './users.service';
 
 export class UsersController {
@@ -15,27 +13,18 @@ export class UsersController {
 	}
 
 	async findOne(id: string) {
-		if (!uuid.validate(id)) {
-			throw new ValidationError('userId is invalid');
-		}
-
+		this.usersService.validateUserId(id);
 		return this.usersService.findOne(id);
 	}
 
 	async update(id: string, input: string) {
-		if (!uuid.validate(id)) {
-			throw new ValidationError('userId is invalid');
-		}
+		this.usersService.validateUserId(id);
 		const updateUserDto = this.usersService.getUpdateUserDto(input);
-
 		return this.usersService.update(id, updateUserDto);
 	}
 
 	async remove(id: string) {
-		if (!uuid.validate(id)) {
-			throw new ValidationError('userId is invalid');
-		}
-
+		this.usersService.validateUserId(id);
 		return this.usersService.remove(id);
 	}
 }

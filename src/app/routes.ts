@@ -1,13 +1,15 @@
+import { IncomingMessage, ServerResponse } from 'http';
 import { NotFoundError, ValidationError } from './errors';
 import { UsersController } from '../users/users.controller';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
+import { ERR_RESOURCE_NOT_FOUND, ERR_UNSUPPORTED_OPERATION } from './constants';
 
 const usersRepository = new UsersRepository();
 const usersService = new UsersService(usersRepository);
 const usersController = new UsersController(usersService);
 
-export const requestListener = async function (req, res) {
+export const requestListener = async function (req: IncomingMessage, res: ServerResponse) {
     res.setHeader("Content-Type", "application/json");
 	const parts = req.url.split('/').filter(Boolean);
 	const buffers = [] as any;
@@ -39,7 +41,7 @@ export const requestListener = async function (req, res) {
 					result = await usersController.remove(parts[2]);
 					break;
 				default:
-					throw new Error('Unsupported operation');
+					throw new Error(ERR_UNSUPPORTED_OPERATION);
 			}
 		} catch (err: any) {
 			if (err instanceof ValidationError) {
@@ -57,6 +59,6 @@ export const requestListener = async function (req, res) {
 
 	} else {
 		res.writeHead(404);
-		res.end(JSON.stringify({ error: 'Resource not found' }));
+		res.end(JSON.stringify({ error: ERR_RESOURCE_NOT_FOUND }));
 	}
 }

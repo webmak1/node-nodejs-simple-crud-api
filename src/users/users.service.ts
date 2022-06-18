@@ -1,3 +1,5 @@
+import * as uuid from 'uuid';
+import { ERR_BODY_VALIDATION, ERR_USERID_INVALID, ERR_USER_NOT_FOUND } from '../app/constants';
 import { NotFoundError, ValidationError } from '../app/errors';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -17,7 +19,7 @@ export class UsersService {
 	findOne(id: string) {
 		const user = this.usersRepository.findOne(id);
 		if (!user) {
-			throw new NotFoundError('user not found');
+			throw new NotFoundError(ERR_USER_NOT_FOUND);
 		}
 
 		return user;
@@ -25,32 +27,37 @@ export class UsersService {
 
 	update(id: string, input: UpdateUserDto) {
 		const user = this.findOne(id);
-
 		return this.usersRepository.update(id, input);
 	}
 
 	remove(id: string) {
 		const user = this.findOne(id);
-
 		return this.usersRepository.remove(id);
 	}
 
-	getCreateUserDto(body: string) {
-		const createUserDto = JSON.parse(body);
+	getCreateUserDto(input: string) {
+		const createUserDto = JSON.parse(input);
 		if (!createUserDto.username || !createUserDto.age || !createUserDto.hobbies) {
 			// TODO count fields
-			throw new ValidationError('request body does not contain required fields');
+			throw new ValidationError(ERR_BODY_VALIDATION);
 		}
+
 		return createUserDto;
 	}
 
-	getUpdateUserDto(body: string) {
-		const updateUserDto = JSON.parse(body);
+	getUpdateUserDto(input: string) {
+		const updateUserDto = JSON.parse(input);
 		if (!updateUserDto.username || !updateUserDto.age || !updateUserDto.hobbies) {
 			// TODO count fields
-			throw new ValidationError('request body does not contain required fields');
+			throw new ValidationError(ERR_BODY_VALIDATION);
 		}
+
 		return updateUserDto;
 	}
 
+	validateUserId(id: string) {
+		if (!uuid.validate(id)) {
+			throw new ValidationError(ERR_USERID_INVALID);
+		}
+	}
 }
