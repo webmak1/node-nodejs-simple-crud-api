@@ -9,7 +9,7 @@ const usersRepository = new UsersRepository();
 const usersService = new UsersService(usersRepository);
 const usersController = new UsersController(usersService);
 
-export const requestListener = async function (req: IncomingMessage, res: ServerResponse) {
+export const routes = async function (req: IncomingMessage, res: ServerResponse) {
     res.setHeader("Content-Type", "application/json");
 	const parts = req.url.split('/').filter(Boolean);
 	const buffers = [] as any;
@@ -39,6 +39,7 @@ export const requestListener = async function (req: IncomingMessage, res: Server
 					break;
 				case 'DELETE':
 					result = await usersController.remove(parts[2]);
+					statusCode = 204;
 					break;
 				default:
 					throw new Error(ERR_UNSUPPORTED_OPERATION);
@@ -51,7 +52,7 @@ export const requestListener = async function (req: IncomingMessage, res: Server
 			} else if (err instanceof Error) {
 				statusCode = 500;
 			}
-			result = { code: statusCode, message: err.message }
+			result = { code: statusCode, message: err.message };
 		}
 
 		res.writeHead(statusCode);
@@ -59,6 +60,6 @@ export const requestListener = async function (req: IncomingMessage, res: Server
 
 	} else {
 		res.writeHead(404);
-		res.end(JSON.stringify({ error: ERR_RESOURCE_NOT_FOUND }));
+		res.end(JSON.stringify({ code: 404, message: ERR_RESOURCE_NOT_FOUND }));
 	}
 }

@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import { ERR_BODY_VALIDATION, ERR_USERID_INVALID, ERR_USER_NOT_FOUND } from '../app/constants';
+import { ERR_BODY_INVALID_FORMAT, ERR_BODY_VALIDATION, ERR_USERID_INVALID, ERR_USER_NOT_FOUND } from '../app/constants';
 import { NotFoundError, ValidationError } from '../app/errors';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -36,8 +36,25 @@ export class UsersService {
 	}
 
 	getCreateUserDto(input: string) {
-		const createUserDto = JSON.parse(input);
-		if (!createUserDto.username || !createUserDto.age || !createUserDto.hobbies) {
+		let createUserDto: CreateUserDto;
+		try {
+			createUserDto = JSON.parse(input);
+		} catch (err) {
+			throw new ValidationError(ERR_BODY_INVALID_FORMAT);
+		}
+
+		if (typeof createUserDto.username !== 'string' ||
+			typeof createUserDto.age !== 'number' ||
+			!Array.isArray(createUserDto.hobbies) ||
+			createUserDto.hobbies.some((item) => typeof item !== 'string')) {
+			// TODO count fields
+			throw new ValidationError(ERR_BODY_VALIDATION);
+		}
+
+		createUserDto.username = createUserDto.username.trim();
+		createUserDto.hobbies.map((item) => item.trim());
+
+		if (!createUserDto.username) {
 			// TODO count fields
 			throw new ValidationError(ERR_BODY_VALIDATION);
 		}
@@ -46,13 +63,7 @@ export class UsersService {
 	}
 
 	getUpdateUserDto(input: string) {
-		const updateUserDto = JSON.parse(input);
-		if (!updateUserDto.username || !updateUserDto.age || !updateUserDto.hobbies) {
-			// TODO count fields
-			throw new ValidationError(ERR_BODY_VALIDATION);
-		}
-
-		return updateUserDto;
+		return Object.assign(new UpdateUserDto(), this.getCreateUserDto(input));
 	}
 
 	validateUserId(id: string) {

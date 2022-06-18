@@ -1,5 +1,3 @@
 import { CreateUserDto } from './create-user.dto';
 
-export class UpdateUserDto extends CreateUserDto {
-	// readonly id: string;
-}
+export class UpdateUserDto extends CreateUserDto { }
