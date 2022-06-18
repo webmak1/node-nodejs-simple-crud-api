@@ -16,11 +16,13 @@ export class UsersRepository {
 	create(input: Partial<User>) {
 		const user = Object.assign(new User(), { id: uuid.v4(), ...input });
 		this.users.push(user);
+
 		return user;
 	}
 
 	update(id: string, input: Partial<User>) {
 		const user = Object.assign(this.findOne(id), input);
+
 		return user;
 	}
 
@@ -30,6 +32,7 @@ export class UsersRepository {
 			const user = this.users.splice(index, 1)[0];
 			return user;
 		}
+
 		return undefined;
 	}
 }

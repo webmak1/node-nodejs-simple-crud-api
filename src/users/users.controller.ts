@@ -1,13 +1,12 @@
 import * as uuid from 'uuid';
-import { NotFoundError, ValidationError } from '../app/errors';
+import { ValidationError } from '../app/errors';
 import { UsersService } from './users.service';
 
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
-	async create(body: string) {
-		console.log('controller, create, got body:', body);
-		const createUserDto = JSON.parse(body);
+	async create(input: string) {
+		const createUserDto = this.usersService.getCreateUserDto(input);
 		return this.usersService.create(createUserDto);
 	}
 
@@ -19,23 +18,24 @@ export class UsersController {
 		if (!uuid.validate(id)) {
 			throw new ValidationError('userId is invalid');
 		}
-		console.log('controller, findOne, got id:', id);
-		const result = this.usersService.findOne(id);
-		console.log('contoller findOne result:', result);
-		if (!result) {
-			throw new NotFoundError('user not found');
-		}
-		return result;
+
+		return this.usersService.findOne(id);
 	}
 
-	async update(id: string, body: string) {
-		console.log('controller, update, got id:', id, 'body:', body);
-		const updateUserDto = JSON.parse(body);
+	async update(id: string, input: string) {
+		if (!uuid.validate(id)) {
+			throw new ValidationError('userId is invalid');
+		}
+		const updateUserDto = this.usersService.getUpdateUserDto(input);
+
 		return this.usersService.update(id, updateUserDto);
 	}
 
 	async remove(id: string) {
-		console.log('controller, remove, got id:', id);
+		if (!uuid.validate(id)) {
+			throw new ValidationError('userId is invalid');
+		}
+
 		return this.usersService.remove(id);
 	}
 }

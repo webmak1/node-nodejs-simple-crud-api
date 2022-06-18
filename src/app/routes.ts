@@ -9,17 +9,14 @@ const usersController = new UsersController(usersService);
 
 export const requestListener = async function (req, res) {
     res.setHeader("Content-Type", "application/json");
-	// console.log('Requested:', req.url);
 	const parts = req.url.split('/').filter(Boolean);
-	// console.log(parts);
-
 	const buffers = [] as any;
+
 	for await (const chunk of req) {
 		buffers.push(chunk);
 	}
-	const body = Buffer.concat(buffers).toString();
 
-	// console.log(body);
+	const body = Buffer.concat(buffers).toString();
 
 	if (parts[0] + '/' + parts[1] === 'api/users' && !parts[3]) {
 
@@ -56,11 +53,10 @@ export const requestListener = async function (req, res) {
 		}
 
 		res.writeHead(statusCode);
-		res.end(JSON.stringify(await result));
+		res.end(JSON.stringify(result));
 
 	} else {
 		res.writeHead(404);
-		res.end(JSON.stringify({error:"Resource not found"}));
+		res.end(JSON.stringify({ error: 'Resource not found' }));
 	}
-
 }
