@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { NotFoundError, ResourceNotFoundError, ValidationError } from './errors';
+import { NotFoundError, ValidationError } from './errors';
 import { UsersController } from '../users/users.controller';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
@@ -32,7 +32,7 @@ export const routes = async function (req: IncomingMessage, res: ServerResponse)
 					break;
 				case 'POST':
 					if (parts[2]) {
-						throw new ResourceNotFoundError(ERR_RESOURCE_NOT_FOUND);
+						throw new NotFoundError(ERR_RESOURCE_NOT_FOUND);
 					}
 					result = await usersController.create(body);
 					statusCode = 201;
@@ -50,7 +50,7 @@ export const routes = async function (req: IncomingMessage, res: ServerResponse)
 		} catch (err: any) {
 			if (err instanceof ValidationError) {
 				statusCode = 400;
-			} else if (err instanceof NotFoundError || err instanceof ResourceNotFoundError) {
+			} else if (err instanceof NotFoundError) {
 				statusCode = 404;
 			} else if (err instanceof Error) {
 				statusCode = 500;

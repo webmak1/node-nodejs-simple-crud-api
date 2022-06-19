@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import supertest from 'supertest';
 import { app } from '../src/app/app';
 import { ERR_BODY_VALIDATION, ERR_RESOURCE_NOT_FOUND, ERR_USERID_INVALID, ERR_USER_NOT_FOUND } from '../src/app/constants';
@@ -6,7 +5,6 @@ import { CreateUserDto } from '../src/users/dto/create-user.dto';
 import { UpdateUserDto } from '../src/users/dto/update-user.dto';
 import { User } from '../src/users/entity/user';
 
-const PORT = process.env.PORT || 4000;
 const API = '/api/users';
 
 describe('Scenario 1 - all operations', () => {
@@ -14,14 +12,6 @@ describe('Scenario 1 - all operations', () => {
 		username: 'Joe',
 		age: 15,
 		hobbies: ['ski', 'music'],
-	});
-
-	beforeAll(async () => {
-		app.listen(PORT);
-	});
-
-	afterAll(async () => {
-		app.close();
 	});
 
 	it('should return no users', async () => {
@@ -102,14 +92,6 @@ describe('Scenario 2 - operations when no user for given id', () => {
 		hobbies: ['ski', 'music'],
 	});
 
-	beforeAll(async () => {
-		app.listen(PORT);
-	});
-
-	afterAll(async () => {
-		app.close();
-	});
-
 	it('should return no users', async () => {
 		const expected = [];
 
@@ -167,14 +149,6 @@ describe('Scenario 3 - validate user input', () => {
 		username: 'Joe',
 		age: 15,
 		hobbies: ['ski', 'music'],
-	});
-
-	beforeAll(async () => {
-		app.listen(PORT);
-	});
-
-	afterAll(async () => {
-		app.close();
 	});
 
 	it('should return no users', async () => {

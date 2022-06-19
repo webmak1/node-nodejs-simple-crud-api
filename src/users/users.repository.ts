@@ -4,7 +4,6 @@ import { EventEmitter } from 'events';
 import { User } from './entity/user';
 import { ERR_UNEXPECTED_ERROR } from '../app/constants';
 
-// TODO Generics
 export class UsersRepository extends EventEmitter {
 
 	private readonly users: User[] = [];
