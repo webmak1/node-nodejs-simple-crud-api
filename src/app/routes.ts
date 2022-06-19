@@ -10,17 +10,17 @@ const usersService = new UsersService(usersRepository);
 const usersController = new UsersController(usersService);
 
 export const routes = async function (req: IncomingMessage, res: ServerResponse) {
-    res.setHeader("Content-Type", "application/json");
+	console.log(`Worker ${process.pid} requested`);
+	res.setHeader("Content-Type", "application/json");
 	const parts = req.url.split('/').filter(Boolean);
-	const buffers = [] as any;
 
+	const buffers = [] as any;
 	for await (const chunk of req) {
 		buffers.push(chunk);
 	}
-
 	const body = Buffer.concat(buffers).toString();
 
-	if (parts[0] + '/' + parts[1] === 'api/users' && !parts[3]) {
+	if (`${parts[0]}/${parts[1]}` === 'api/users' && !parts[3]) {
 
 		let result;
 		let statusCode = 200;

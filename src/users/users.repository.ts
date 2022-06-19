@@ -5,34 +5,42 @@ import { User } from './entity/user';
 export class UsersRepository {
 	private readonly users: User[] = [];
 
-	find() {
-		return this.users;
+	async find(): Promise<User[]> {
+		return new Promise((resolve, reject) => {
+			resolve(this.users);
+		});
 	}
 
-	findOne(id: string) {
-		return this.users.filter((item) => item.id === id)[0];
+	async findOne(id: string): Promise<User> {
+		return new Promise((resolve, reject) => {
+			resolve(this.users.filter((item) => item.id === id)[0]);
+		});
 	}
 
-	create(input: Partial<User>) {
-		const user = Object.assign(new User(), { id: uuid.v4(), ...input });
-		this.users.push(user);
-
-		return user;
+	async create(input: Partial<User>): Promise<User> {
+		return new Promise((resolve, reject) => {
+			const user = Object.assign(new User(), { id: uuid.v4(), ...input });
+			this.users.push(user);
+			resolve(user);
+		});
 	}
 
-	update(id: string, input: Partial<User>) {
-		const user = Object.assign(this.findOne(id), input);
-
-		return user;
+	async update(id: string, input: Partial<User>): Promise<User> {
+		return new Promise(async (resolve, reject) => {
+			const user = Object.assign(await this.findOne(id), input);
+			resolve(user);
+		});
 	}
 
-	remove(id: string) {
-		const index = this.users.findIndex((item) => item.id === id);
-		if (index != -1) {
-			const user = this.users.splice(index, 1)[0];
-			return user;
-		}
+	async remove(id: string): Promise<User> {
+		return new Promise((resolve, reject) => {
+			const index = this.users.findIndex((item) => item.id === id);
+			if (index != -1) {
+				const user = this.users.splice(index, 1)[0];
+				resolve(user);
+			}
 
-		return undefined;
+			resolve(undefined);
+		});
 	}
 }

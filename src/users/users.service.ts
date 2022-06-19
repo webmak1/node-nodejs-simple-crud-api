@@ -1,23 +1,25 @@
 import * as uuid from 'uuid';
-import { ERR_BODY_INVALID_FORMAT, ERR_BODY_VALIDATION, ERR_USERID_INVALID, ERR_USER_NOT_FOUND } from '../app/constants';
+import { ERR_USERID_INVALID, ERR_USER_NOT_FOUND } from '../app/constants';
 import { NotFoundError, ValidationError } from '../app/errors';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entity/user';
 import { UsersRepository } from './users.repository';
 
 export class UsersService {
 	constructor(private readonly usersRepository: UsersRepository) {}
 
-	create(input: CreateUserDto) {
+	async create(input: CreateUserDto): Promise<User> {
 		return this.usersRepository.create(input);
 	}
 
-	findAll() {
+	async findAll(): Promise<User[]> {
 		return this.usersRepository.find();
 	}
 
-	findOne(id: string) {
-		const user = this.usersRepository.findOne(id);
+	async findOne(id: string): Promise<User> {
+		const user = await this.usersRepository.findOne(id);
+
 		if (!user) {
 			throw new NotFoundError(ERR_USER_NOT_FOUND);
 		}
@@ -25,45 +27,15 @@ export class UsersService {
 		return user;
 	}
 
-	update(id: string, input: UpdateUserDto) {
-		const user = this.findOne(id);
-		return this.usersRepository.update(id, input);
+	async update(id: string, input: UpdateUserDto): Promise<User> {
+		await this.findOne(id);
+		const result = this.usersRepository.update(id, input);
+		return result;
 	}
 
-	remove(id: string) {
-		const user = this.findOne(id);
+	async remove(id: string): Promise<User> {
+		await this.findOne(id);
 		return this.usersRepository.remove(id);
-	}
-
-	getCreateUserDto(input: string) {
-		let createUserDto: CreateUserDto;
-		try {
-			createUserDto = JSON.parse(input);
-		} catch (err) {
-			throw new ValidationError(ERR_BODY_INVALID_FORMAT);
-		}
-
-		if (typeof createUserDto.username !== 'string' ||
-			typeof createUserDto.age !== 'number' ||
-			!Array.isArray(createUserDto.hobbies) ||
-			createUserDto.hobbies.some((item) => typeof item !== 'string')) {
-			// TODO count fields
-			throw new ValidationError(ERR_BODY_VALIDATION);
-		}
-
-		createUserDto.username = createUserDto.username.trim();
-		createUserDto.hobbies.map((item) => item.trim());
-
-		if (!createUserDto.username) {
-			// TODO count fields
-			throw new ValidationError(ERR_BODY_VALIDATION);
-		}
-
-		return createUserDto;
-	}
-
-	getUpdateUserDto(input: string) {
-		return Object.assign(new UpdateUserDto(), this.getCreateUserDto(input));
 	}
 
 	validateUserId(id: string) {
