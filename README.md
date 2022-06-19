@@ -1,38 +1,60 @@
 # Simple CRUD API
 
-## How to run
+... written by TypeScript with Node.js.
 
-Clone and install
+Task is [here](https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/crud-api/assignment.md).
 
-```npm i```
+## 💻 How to install
 
-#### Run the application in development mode
-`npm run start:dev`
+Clone and install packages
 
-#### Run the application in production mode
-`npm run start:prod`
+```
+npm i
+```
 
-#### Run test API
-`npm test`
+## 🚀 How to run
 
-#### Run cluster mode with default load balancer and one in-memory-database for all workers
-`npm run start:multi`
+Run the application in development mode
 
-## API
+```
+npm run start:dev
+```
+
+Run the application in production mode
+
+```
+npm run start:prod
+```
+
+Run tests scenarios for API
+
+```
+npm test
+```
+
+Run cluster mode with default load balancer and one in-memory-database for all workers
+
+```
+npm run start:multi
+```
+
+In console you can watch which worker response on the request. Workers should round-robin and data from database should be consistent for all workers.
+
+## 💥 API
 
 Implemented endpoint: `api/users`
 
-`GET api/users` is used to get all users
+`GET api/users` - to get all users
 
-`GET api/users/${userId}` is used to get user by id (uuid)
+`GET api/users/${userId}` - to get user by id (uuid)
 
-`POST api/users` is used to create record about new user and store it in database
+`POST api/users` - to create record about new user and store it in database
 
-`PUT api/users/${userId}` is used to update existing user (all fields required)
+`PUT api/users/${userId}` - to update existing user (**all fields required**)
 
-`DELETE api/users/${userId}` is used to delete existing user from database
+`DELETE api/users/${userId}` - to delete existing user from database
 
-## User's fields
+## User's mandratory fields
 
 `username` — user's name (string, **required**)
 
@@ -40,4 +62,8 @@ Implemented endpoint: `api/users`
 
 `hobbies` — user's hobbies (array of strings or empty array, **required**)
 
+## ⚙️ Postman
 
+You can find Postman collection with all relized API requests in the root of the repository.
+
+Have fun! :)
