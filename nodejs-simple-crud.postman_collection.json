@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "066dc217-ac4e-4248-a8c9-8c316f88f005",
+		"_postman_id": "e1aa5717-0ab9-4ace-a07f-c01ccc9572fe",
 		"name": "nodejs-simple-crud",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -33,7 +33,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", \"5c3ae0d2-50a3-4aca-864e-f7ae83a21e6e\");"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -43,7 +43,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4000/api/users/{{id}}",
+					"raw": "http://localhost:4000/api/users/5c3ae0d2-50a3-4aca-864e-f7ae83a21e6e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -52,7 +52,7 @@
 					"path": [
 						"api",
 						"users",
-						"{{id}}"
+						"5c3ae0d2-50a3-4aca-864e-f7ae83a21e6e"
 					]
 				}
 			},
@@ -65,7 +65,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"joe\",\n    \"age\": 15,\n    \"hobbies\": [\"computer games\", \"EUC\", \"sport\"]\n}",
+					"raw": "{\n    \"username\": \"Joe\",\n    \"age\": 15,\n    \"hobbies\": [\"ski\", \"music\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -95,7 +95,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"joe\",\n    \"age\": 25,\n    \"hobbies\": [\"computer games\", \"EUC\", \"sport\"]\n}",
+					"raw": "{\n    \"username\": \"Mary\",\n    \"age\": 25,\n    \"hobbies\": [\"books\", \"sport\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -103,7 +103,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:4000/api/users/5c3ae0d2-50a3-4aca-864e-f7ae83a21e6e",
+					"raw": "http://localhost:4000/api/users/f809fe1e-0c77-4274-bcab-bf31a91d26c3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -112,7 +112,7 @@
 					"path": [
 						"api",
 						"users",
-						"5c3ae0d2-50a3-4aca-864e-f7ae83a21e6e"
+						"f809fe1e-0c77-4274-bcab-bf31a91d26c3"
 					]
 				}
 			},

@@ -6,7 +6,7 @@
 	"scripts": {
 		"start:dev": "nodemon",
 		"start:prod": "tsc && node ./dist/index.js",
-		"start:multi": "nodemon -- --cluster=enable",
+		"start:multi": "tsc && node ./dist/index.js --cluster=enable",
 		"test": "jest --silent --verbose --config ./test/jest-e2e.json"
 	},
 	"repository": {
