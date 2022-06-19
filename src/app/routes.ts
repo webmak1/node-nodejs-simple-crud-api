@@ -1,11 +1,11 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { NotFoundError, ValidationError } from './errors';
+import { NotFoundError, ResourceNotFoundError, ValidationError } from './errors';
 import { UsersController } from '../users/users.controller';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
 import { ERR_RESOURCE_NOT_FOUND, ERR_UNSUPPORTED_OPERATION } from './constants';
 
-const usersRepository = new UsersRepository();
+export const usersRepository = new UsersRepository();
 const usersService = new UsersService(usersRepository);
 const usersController = new UsersController(usersService);
 
@@ -31,6 +31,9 @@ export const routes = async function (req: IncomingMessage, res: ServerResponse)
 					result = await (parts[2] ? usersController.findOne(parts[2]) : usersController.findAll());
 					break;
 				case 'POST':
+					if (parts[2]) {
+						throw new ResourceNotFoundError(ERR_RESOURCE_NOT_FOUND);
+					}
 					result = await usersController.create(body);
 					statusCode = 201;
 					break;
@@ -47,7 +50,7 @@ export const routes = async function (req: IncomingMessage, res: ServerResponse)
 		} catch (err: any) {
 			if (err instanceof ValidationError) {
 				statusCode = 400;
-			} else if (err instanceof NotFoundError) {
+			} else if (err instanceof NotFoundError || err instanceof ResourceNotFoundError) {
 				statusCode = 404;
 			} else if (err instanceof Error) {
 				statusCode = 500;
