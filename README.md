@@ -1,5 +1,12 @@
 # Simple CRUD API
 
+<br/>
+
+**Discussion:**  
+https://www.youtube.com/watch?v=3ywav0TtSbA
+
+<br/>
+
 ... written by TypeScript with Node.js.
 
 Task is [here](https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/crud-api/assignment.md).
